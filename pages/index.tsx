@@ -2,6 +2,7 @@ import { Container, Box, Grid } from "@mui/material";
 import type { NextPage } from "next";
 import * as React from "react";
 import { useState } from "react";
+import Image from "next/image";
 
 const positionOpt = {
   display: "flex",
@@ -10,23 +11,59 @@ const positionOpt = {
   justifyContent: "center",
 };
 
-const random = () => Math.floor(Math.random() * 6);
+const random = (size: number) => Math.floor(Math.random() * size);
+
+interface Face {
+  key: string;
+  alt: string;
+  src: string;
+}
+
+const FACE_DATA: Face[] = [
+  { key: "o", alt: "お", src: "/o.svg" },
+  { key: "ha", alt: "は", src: "/ha.svg" },
+  { key: "ma", alt: "ま", src: "/ma.svg" },
+  { key: "chi", alt: "ち", src: "/chi.svg" },
+  { key: "ko", alt: "こ", src: "/ko.svg" },
+];
 
 const Dice = (props: { children: React.ReactNode }) => {
-  const [face, setFace] = useState<number | undefined>();
+  const [face, setFace] = useState<Face | undefined>();
 
-  const faces = ["お", "は", "ま", "ち", "こ", "お"];
-  var i: number | undefined = undefined;
+  const faces = [
+    FACE_DATA[0],
+    FACE_DATA[1],
+    FACE_DATA[2],
+    FACE_DATA[3],
+    FACE_DATA[4],
+    FACE_DATA[0],
+  ];
+  const size = faces.length;
 
-  const roll = () => random();
+  const roll = () => random(size);
 
   const handleOnClick = () => {
-    setFace(roll());
+    if (face === undefined) {
+      const i = roll();
+      setFace(faces[i]);
+    }
+    console.log(face);
   };
 
   return (
-    <div style={{ height: "100%", width: "100%", backgroundColor: "mintcream" }} onClick={handleOnClick}>
-      {face !== undefined ? `${face} ${faces[face]}` : `${face}`}
+    <div
+      style={{
+        height: "100%",
+        width: "100%",
+        backgroundColor: "mintcream",
+      }}
+      onClick={handleOnClick}
+    >
+      {face !== undefined ? (
+        <Image src={face.src} alt={face.alt} height="100%" width="100%" />
+      ) : (
+        <Image src="/empty.svg" alt="empty" height="100%" width="100%" />
+      )}
     </div>
   );
 };
