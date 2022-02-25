@@ -13,31 +13,25 @@ const positionOpt = {
 
 const random = (size: number) => Math.floor(Math.random() * size);
 
-interface Face {
-  key: string;
-  alt: string;
-  src: string;
+const Face = {
+  O: "o",
+  Ha: "ha",
+  Ma: "ma",
+  Chi: "chi",
+  Ko: "ko",
+} as const;
+type Face = typeof Face[keyof typeof Face];
+
+const toSrc = (f: Face) => `/${f}.svg`;
+
+interface DiceProps {
+  faces: Face[];
 }
 
-const FACE_DATA: Face[] = [
-  { key: "o", alt: "お", src: "/o.svg" },
-  { key: "ha", alt: "は", src: "/ha.svg" },
-  { key: "ma", alt: "ま", src: "/ma.svg" },
-  { key: "chi", alt: "ち", src: "/chi.svg" },
-  { key: "ko", alt: "こ", src: "/ko.svg" },
-];
-
-const Dice = (props: { children: React.ReactNode }) => {
+const Dice = (props: DiceProps) => {
+  const [faces, _] = useState<Face[]>(props.faces);
   const [face, setFace] = useState<Face | undefined>();
 
-  const faces = [
-    FACE_DATA[0],
-    FACE_DATA[1],
-    FACE_DATA[2],
-    FACE_DATA[3],
-    FACE_DATA[4],
-    FACE_DATA[0],
-  ];
   const size = faces.length;
 
   const roll = () => random(size);
@@ -47,7 +41,6 @@ const Dice = (props: { children: React.ReactNode }) => {
       const i = roll();
       setFace(faces[i]);
     }
-    console.log(face);
   };
 
   return (
@@ -55,14 +48,16 @@ const Dice = (props: { children: React.ReactNode }) => {
       style={{
         height: "100%",
         width: "100%",
-        backgroundColor: "mintcream",
+        display: "flex",
+        justifyContent: "center",
+        backgroundColor: "skyblue",
       }}
       onClick={handleOnClick}
     >
       {face !== undefined ? (
-        <Image src={face.src} alt={face.alt} height="100%" width="100%" />
+        <Image src={toSrc(face)} alt={face} height="150" width="150" />
       ) : (
-        <Image src="/empty.svg" alt="empty" height="100%" width="100%" />
+        <Image src="/empty.svg" alt="empty" height="150" width="150" />
       )}
     </div>
   );
@@ -73,20 +68,28 @@ const DiceBox = () => {
     <>
       <Grid container spacing={2}>
         <Grid item xs={4}>
-          <Dice>⚀</Dice>
+          <Dice faces={[Face.O, Face.Ha, Face.Ma, Face.Chi, Face.Ko, Face.O]} />
         </Grid>
         <Grid item xs={4}>
-          <Dice>⚀</Dice>
+          <Dice
+            faces={[Face.O, Face.Ha, Face.Ma, Face.Chi, Face.Ko, Face.Ha]}
+          />
         </Grid>
         <Grid item xs={4}>
-          <Dice>⚀</Dice>
+          <Dice
+            faces={[Face.O, Face.Ha, Face.Ma, Face.Chi, Face.Ko, Face.Ma]}
+          />
         </Grid>
         <Grid item xs={2}></Grid>
         <Grid item xs={4}>
-          <Dice>⚀</Dice>
+          <Dice
+            faces={[Face.O, Face.Ha, Face.Ma, Face.Chi, Face.Ko, Face.Chi]}
+          />
         </Grid>
         <Grid item xs={4}>
-          <Dice>⚀</Dice>
+          <Dice
+            faces={[Face.O, Face.Ha, Face.Ma, Face.Chi, Face.Ko, Face.Ko]}
+          />
         </Grid>
         <Grid item xs={2}></Grid>
       </Grid>
