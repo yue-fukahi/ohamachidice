@@ -1,4 +1,4 @@
-import { Container, Box, Grid } from "@mui/material";
+import { Container, Box, Grid, Button, selectClasses } from "@mui/material";
 import type { NextPage } from "next";
 import * as React from "react";
 import { useState } from "react";
@@ -23,26 +23,12 @@ const Face = {
 type Face = typeof Face[keyof typeof Face];
 
 const toSrc = (f: Face) => `/${f}.svg`;
-
 interface DiceProps {
   faces: Face[];
+  selected?: Face;
 }
 
 const Dice = (props: DiceProps) => {
-  const [faces, _] = useState<Face[]>(props.faces);
-  const [face, setFace] = useState<Face | undefined>();
-
-  const size = faces.length;
-
-  const roll = () => random(size);
-
-  const handleOnClick = () => {
-    if (face === undefined) {
-      const i = roll();
-      setFace(faces[i]);
-    }
-  };
-
   return (
     <div
       style={{
@@ -52,10 +38,14 @@ const Dice = (props: DiceProps) => {
         justifyContent: "center",
         backgroundColor: "skyblue",
       }}
-      onClick={handleOnClick}
     >
-      {face !== undefined ? (
-        <Image src={toSrc(face)} alt={face} height="150" width="150" />
+      {props.selected ? (
+        <Image
+          src={toSrc(props.selected)}
+          alt={props.selected}
+          height="150"
+          width="150"
+        />
       ) : (
         <Image src="/empty.svg" alt="empty" height="150" width="150" />
       )}
@@ -64,35 +54,57 @@ const Dice = (props: DiceProps) => {
 };
 
 const DiceBox = () => {
+  const defaultDices: DiceProps[] = [
+    { faces: [Face.O, Face.Ha, Face.Ma, Face.Chi, Face.Ko, Face.O] },
+    { faces: [Face.O, Face.Ha, Face.Ma, Face.Chi, Face.Ko, Face.Ha] },
+    { faces: [Face.O, Face.Ha, Face.Ma, Face.Chi, Face.Ko, Face.Ma] },
+    { faces: [Face.O, Face.Ha, Face.Ma, Face.Chi, Face.Ko, Face.Chi] },
+    { faces: [Face.O, Face.Ha, Face.Ma, Face.Chi, Face.Ko, Face.Ko] },
+  ];
+
+  const [dices, setDices] = useState(defaultDices);
+  const [disabled, setDisabled] = useState(false);
+
+  const roll = () => {
+    setDices(defaultDices);
+    setDisabled(true);
+
+    setDices(
+      dices.map((dice) => {
+        const i = random(dice.faces.length);
+        return { ...dice, selected: dice.faces[i] };
+      })
+    );
+
+    setDisabled(false);
+  };
+
   return (
     <>
       <Grid container spacing={2}>
         <Grid item xs={4}>
-          <Dice faces={[Face.O, Face.Ha, Face.Ma, Face.Chi, Face.Ko, Face.O]} />
+          <Dice {...dices[0]} />
         </Grid>
         <Grid item xs={4}>
-          <Dice
-            faces={[Face.O, Face.Ha, Face.Ma, Face.Chi, Face.Ko, Face.Ha]}
-          />
+          <Dice {...dices[1]} />
         </Grid>
         <Grid item xs={4}>
-          <Dice
-            faces={[Face.O, Face.Ha, Face.Ma, Face.Chi, Face.Ko, Face.Ma]}
-          />
+          <Dice {...dices[2]} />
         </Grid>
         <Grid item xs={2}></Grid>
         <Grid item xs={4}>
-          <Dice
-            faces={[Face.O, Face.Ha, Face.Ma, Face.Chi, Face.Ko, Face.Chi]}
-          />
+          <Dice {...dices[3]} />
         </Grid>
         <Grid item xs={4}>
-          <Dice
-            faces={[Face.O, Face.Ha, Face.Ma, Face.Chi, Face.Ko, Face.Ko]}
-          />
+          <Dice {...dices[4]} />
         </Grid>
         <Grid item xs={2}></Grid>
       </Grid>
+      <Box sx={{ paddingTop: 3 }}>
+        <Button variant="outlined" size="large" onClick={roll} disabled={disabled}>
+          おはまちこする
+        </Button>
+      </Box>
     </>
   );
 };
