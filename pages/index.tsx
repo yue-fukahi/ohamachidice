@@ -28,6 +28,65 @@ interface DiceProps {
   selected?: Face;
 }
 
+const HandName = {
+  Ohamachiko: "OHAMACHIKO",
+  Hakomachiko: "HAKOMACHIKO",
+  Machiko: "MACHIKO",
+  MaoMao: "MAOMAO",
+  Hamachi: "HAMACHI",
+} as const;
+type HandName = typeof HandName[keyof typeof HandName];
+
+interface Hand {
+  name: HandName;
+  units: [Face, number][];
+}
+
+const HandList: Hand[] = [
+  {
+    name: HandName.Ohamachiko,
+    units: [
+      [Face.O, 1],
+      [Face.Ha, 1],
+      [Face.Ma, 1],
+      [Face.Chi, 1],
+      [Face.Ko, 1],
+    ],
+  },
+  {
+    name: HandName.Hakomachiko,
+    units: [
+      [Face.Ha, 1],
+      [Face.Ma, 1],
+      [Face.Chi, 1],
+      [Face.Ko, 2],
+    ],
+  },
+  {
+    name: HandName.Machiko,
+    units: [
+      [Face.Ma, 1],
+      [Face.Chi, 1],
+      [Face.Ko, 1],
+    ],
+  },
+  {
+    name: HandName.MaoMao,
+    units: [
+      [Face.Ma, 2],
+      [Face.O, 2],
+    ],
+  },
+  {
+    name: HandName.Hamachi,
+    units: [
+      [Face.Ha, 1],
+      [Face.Ma, 1],
+      [Face.Chi, 1],
+    ],
+  },
+];
+
 const Dice = (props: DiceProps) => {
   return (
     <div
@@ -80,12 +139,36 @@ const DiceBox = () => {
     setDice: (props: DiceProps) => void,
     ms: number
   ) => {
-    return new Promise((resolve) => {
+    return new Promise<Face>((resolve) => {
       setTimeout(() => {
         const i = random(dice.faces.length);
-        resolve(setDice({ ...dice, selected: dice.faces[i] }));
+        setDice({ ...dice, selected: dice.faces[i] });
+        resolve(dice.faces[i]);
       }, ms);
     });
+  };
+
+  const counts = (map: Map<Face, number>, face: Face) => map.get(face) || 0;
+
+  const buildHand = (faces: Face[]) => {
+    const cnt = faces.reduce((map, face: Face) => {
+      const v = map.get(face) || 0;
+      return map.set(face, v + 1);
+    }, new Map<Face, number>());
+
+    const much = HandList.find((hand) => {
+      // Not match but much !!!
+      const much = hand.units.reduce((much, unit: [Face, number]) => {
+        const [face, num] = unit;
+        return much && counts(cnt, face) >= num;
+      }, true);
+
+      return much;
+    });
+
+    if (much) {
+      console.log(much.name);
+    }
   };
 
   const handleOnClick = () => {
@@ -98,7 +181,10 @@ const DiceBox = () => {
       roll(dice2, setDice2, 400 * 3),
       roll(dice3, setDice3, 400 * 4),
       roll(dice4, setDice4, 400 * 5),
-    ]).then(() => {
+    ]).then((values) => {
+      buildHand(
+        values.filter<Face>((face): face is Face => face !== undefined)
+      );
       setDisabled(false);
     });
   };
