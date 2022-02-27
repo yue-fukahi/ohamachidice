@@ -1,8 +1,9 @@
-import { Container, Box, Grid, Button, selectClasses } from "@mui/material";
+import { Container, Box, Grid, Button } from "@mui/material";
 import type { NextPage } from "next";
 import * as React from "react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
+import toast, { Toaster } from "react-hot-toast";
 
 const positionOpt = {
   display: "flex",
@@ -39,12 +40,14 @@ type HandName = typeof HandName[keyof typeof HandName];
 
 interface Hand {
   name: HandName;
+  icon: string;
   units: [Face, number][];
 }
 
 const HandList: Hand[] = [
   {
     name: HandName.Ohamachiko,
+    icon: "🐰",
     units: [
       [Face.O, 1],
       [Face.Ha, 1],
@@ -55,6 +58,7 @@ const HandList: Hand[] = [
   },
   {
     name: HandName.Hakomachiko,
+    icon: "🐰",
     units: [
       [Face.Ha, 1],
       [Face.Ma, 1],
@@ -64,6 +68,7 @@ const HandList: Hand[] = [
   },
   {
     name: HandName.Machiko,
+    icon: "🐰",
     units: [
       [Face.Ma, 1],
       [Face.Chi, 1],
@@ -72,6 +77,7 @@ const HandList: Hand[] = [
   },
   {
     name: HandName.MaoMao,
+    icon: "😺",
     units: [
       [Face.Ma, 2],
       [Face.O, 2],
@@ -79,6 +85,7 @@ const HandList: Hand[] = [
   },
   {
     name: HandName.Hamachi,
+    icon: "🐟",
     units: [
       [Face.Ha, 1],
       [Face.Ma, 1],
@@ -166,9 +173,7 @@ const DiceBox = () => {
       return much;
     });
 
-    if (much) {
-      console.log(much.name);
-    }
+    return much;
   };
 
   const handleOnClick = () => {
@@ -176,15 +181,26 @@ const DiceBox = () => {
     setDisabled(true);
 
     Promise.all([
-      roll(dice0, setDice0, 400 * 1),
-      roll(dice1, setDice1, 400 * 2),
-      roll(dice2, setDice2, 400 * 3),
-      roll(dice3, setDice3, 400 * 4),
-      roll(dice4, setDice4, 400 * 5),
+      roll(dice0, setDice0, 350 * 1),
+      roll(dice1, setDice1, 350 * 2),
+      roll(dice2, setDice2, 350 * 3),
+      roll(dice3, setDice3, 350 * 4),
+      roll(dice4, setDice4, 350 * 5),
     ]).then((values) => {
-      buildHand(
+      const hand = buildHand(
         values.filter<Face>((face): face is Face => face !== undefined)
       );
+
+      if (hand) {
+        toast.success(hand.name, {
+          icon: hand.icon,
+          style: {
+            fontSize: "350%",
+            fontWeight: "200",
+          },
+        });
+      }
+
       setDisabled(false);
     });
   };
@@ -227,6 +243,7 @@ const DiceBox = () => {
 const Home: NextPage = () => {
   return (
     <React.Fragment>
+      <Toaster />
       <Container>
         <Box
           sx={{
