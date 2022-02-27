@@ -102,7 +102,6 @@ const Dice = (props: DiceProps) => {
         width: "100%",
         display: "flex",
         justifyContent: "center",
-        backgroundColor: "skyblue",
       }}
     >
       {props.selected ? (
@@ -195,7 +194,7 @@ const DiceBox = () => {
         toast.success(hand.name, {
           icon: hand.icon,
           style: {
-            fontSize: "350%",
+            fontSize: "250%",
             fontWeight: "200",
           },
         });
@@ -250,7 +249,6 @@ const Home: NextPage = () => {
             ...positionOpt,
             width: "100%",
             height: "100vh",
-            bgcolor: "#cfe8fc",
           }}
         >
           <Box
@@ -262,6 +260,7 @@ const Home: NextPage = () => {
               m: 1,
               bgcolor: "background.paper",
               borderRadius: 1,
+              border: "1px solid #1C78D3",
             }}
           >
             <DiceBox />
