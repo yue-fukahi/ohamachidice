@@ -107,11 +107,15 @@ const HandList: Hand[] = [
 ];
 
 const Dice = (props: DiceProps) => {
+  const imgStyle = {
+    width: "100%",
+    maxHeight: "150px",
+  };
+
   return (
     <div
       style={{
         height: "100%",
-        width: "100%",
         display: "flex",
         justifyContent: "center",
       }}
@@ -120,11 +124,10 @@ const Dice = (props: DiceProps) => {
         <img
           src={faceImageSrc.get(props.selected)}
           alt={props.selected}
-          height="150"
-          width="150"
+          style={imgStyle}
         />
       ) : (
-        <img src={emptyImg.src} alt="empty" height="150" width="150" />
+        <img src={emptyImg.src} alt="empty" style={imgStyle} />
       )}
     </div>
   );
