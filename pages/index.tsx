@@ -282,7 +282,7 @@ const Home: NextPage = () => {
             sx={{
               ...positionOpt,
               width: "100%",
-              height: "60vh",
+              height: "70vh",
               p: 1,
               m: 1,
               bgcolor: "background.paper",
