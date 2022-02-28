@@ -2,7 +2,6 @@ import { Container, Box, Grid, Button } from "@mui/material";
 import type { NextPage } from "next";
 import * as React from "react";
 import { useState } from "react";
-import Image from "next/image";
 import toast, { Toaster } from "react-hot-toast";
 
 const positionOpt = {
@@ -11,6 +10,13 @@ const positionOpt = {
   alignContent: "center",
   justifyContent: "center",
 };
+
+import faceOImg from "../public/o.svg";
+import faceHaImg from "../public/ha.svg";
+import faceMaImg from "../public/ma.svg";
+import faceChiImg from "../public/chi.svg";
+import faceKoImg from "../public/ko.svg";
+import emptyImg from "../public/empty.svg";
 
 const random = (size: number) => Math.floor(Math.random() * size);
 
@@ -23,7 +29,13 @@ const Face = {
 } as const;
 type Face = typeof Face[keyof typeof Face];
 
-const toSrc = (f: Face) => `/${f}.svg`;
+const faceImageSrc: Map<Face, any> = new Map([
+  [Face.O, faceOImg.src],
+  [Face.Ha, faceHaImg.src],
+  [Face.Ma, faceMaImg.src],
+  [Face.Chi, faceChiImg.src],
+  [Face.Ko, faceKoImg.src],
+]);
 interface DiceProps {
   faces: Face[];
   selected?: Face;
@@ -105,14 +117,14 @@ const Dice = (props: DiceProps) => {
       }}
     >
       {props.selected ? (
-        <Image
-          src={toSrc(props.selected)}
+        <img
+          src={faceImageSrc.get(props.selected)}
           alt={props.selected}
           height="150"
           width="150"
         />
       ) : (
-        <Image src="/empty.svg" alt="empty" height="150" width="150" />
+        <img src={emptyImg.src} alt="empty" height="150" width="150" />
       )}
     </div>
   );
