@@ -222,6 +222,18 @@ const DiceBox = () => {
   return (
     <>
       <Grid container spacing={2}>
+        <Grid
+          item
+          xs={12}
+          style={{
+            fontSize: "200%",
+            fontWeight: "200",
+            textAlign: "center",
+            paddingBottom: 10,
+          }}
+        >
+          OHAMACHI DICE
+        </Grid>
         <Grid item xs={4}>
           <Dice {...dice0} />
         </Grid>
