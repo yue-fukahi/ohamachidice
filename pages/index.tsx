@@ -1,7 +1,7 @@
 import { Container, Box, Grid, Button } from "@mui/material";
 import type { NextPage } from "next";
 import * as React from "react";
-import { useState } from "react";
+import { CSSProperties, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 
 const positionOpt = {
@@ -11,12 +11,12 @@ const positionOpt = {
   justifyContent: "center",
 };
 
-import faceOImg from "../public/o.svg";
-import faceHaImg from "../public/ha.svg";
-import faceMaImg from "../public/ma.svg";
-import faceChiImg from "../public/chi.svg";
-import faceKoImg from "../public/ko.svg";
-import emptyImg from "../public/empty.svg";
+import FaceOImg from "../public/o.svg";
+import FaceHaImg from "../public/ha.svg";
+import FaceMaImg from "../public/ma.svg";
+import FaceChiImg from "../public/chi.svg";
+import FaceKoImg from "../public/ko.svg";
+import EmptyImg from "../public/empty.svg";
 
 const random = (size: number) => Math.floor(Math.random() * size);
 
@@ -26,16 +26,27 @@ const Face = {
   Ma: "ma",
   Chi: "chi",
   Ko: "ko",
+  Empty: "empty",
 } as const;
 type Face = typeof Face[keyof typeof Face];
 
-const faceImageSrc: Map<Face, any> = new Map([
-  [Face.O, faceOImg.src],
-  [Face.Ha, faceHaImg.src],
-  [Face.Ma, faceMaImg.src],
-  [Face.Chi, faceChiImg.src],
-  [Face.Ko, faceKoImg.src],
-]);
+const FaceImage = ({ face, style }: { face?: Face; style?: CSSProperties }) => {
+  switch (face) {
+    case Face.O:
+      return <FaceOImg style={style} />;
+    case Face.Ha:
+      return <FaceHaImg style={style} />;
+    case Face.Ma:
+      return <FaceMaImg style={style} />;
+    case Face.Chi:
+      return <FaceChiImg style={style} />;
+    case Face.Ko:
+      return <FaceKoImg style={style} />;
+    default:
+      return <EmptyImg style={style} />;
+  }
+};
+
 interface DiceProps {
   faces: Face[];
   selected?: Face;
@@ -120,15 +131,7 @@ const Dice = (props: DiceProps) => {
         justifyContent: "center",
       }}
     >
-      {props.selected ? (
-        <img
-          src={faceImageSrc.get(props.selected)}
-          alt={props.selected}
-          style={imgStyle}
-        />
-      ) : (
-        <img src={emptyImg.src} alt="empty" style={imgStyle} />
-      )}
+      <FaceImage face={props.selected} style={imgStyle} />
     </div>
   );
 };
