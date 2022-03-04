@@ -211,6 +211,7 @@ const DiceBox = () => {
       if (hand) {
         toast.success(hand.name, {
           icon: hand.icon,
+          duration: 5000,
           style: {
             fontSize: "250%",
             fontWeight: "200",
