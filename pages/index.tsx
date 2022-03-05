@@ -1,15 +1,8 @@
-import { Container, Box, Grid, Button } from "@mui/material";
+import { Container, Box, Grid, Button, Stack } from "@mui/material";
 import type { NextPage } from "next";
 import * as React from "react";
 import { CSSProperties, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
-
-const positionOpt = {
-  display: "flex",
-  flexWrap: "wrap",
-  alignContent: "center",
-  justifyContent: "center",
-};
 
 import FaceOImg from "../public/o.svg";
 import FaceHaImg from "../public/ha.svg";
@@ -124,15 +117,15 @@ const Dice = (props: DiceProps) => {
   };
 
   return (
-    <div
-      style={{
-        height: "100%",
-        display: "flex",
+    <Box
+      sx={{
         justifyContent: "center",
+        alignItems: "center",
+        p: 1,
       }}
     >
       <FaceImage face={props.selected} style={imgStyle} />
-    </div>
+    </Box>
   );
 };
 
@@ -224,79 +217,81 @@ const DiceBox = () => {
   };
 
   return (
-    <>
-      <Grid container spacing={2}>
-        <Grid
-          item
-          xs={12}
-          style={{
+    <Box
+      sx={{
+        width: "100%",
+        p: 2,
+        bgcolor: "background.paper",
+        borderRadius: 1,
+        border: "1px solid #1C78D3",
+      }}
+    >
+      <Stack
+        spacing={2}
+        sx={{
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Box
+          sx={{
             fontSize: "200%",
             fontWeight: "200",
             textAlign: "center",
-            paddingBottom: 10,
           }}
         >
           OHAMACHI DICE
+        </Box>
+        <Grid container justifyContent="center" alignItems="center">
+          <Grid item xs={4}>
+            <Dice {...dice0} />
+          </Grid>
+          <Grid item xs={4}>
+            <Dice {...dice2} />
+          </Grid>
+          <Grid item xs={4}>
+            <Dice {...dice4} />
+          </Grid>
+          <Grid item xs={4}>
+            <Dice {...dice1} />
+          </Grid>
+          <Grid item xs={4}>
+            <Dice {...dice3} />
+          </Grid>
         </Grid>
-        <Grid item xs={4}>
-          <Dice {...dice0} />
-        </Grid>
-        <Grid item xs={4}>
-          <Dice {...dice2} />
-        </Grid>
-        <Grid item xs={4}>
-          <Dice {...dice4} />
-        </Grid>
-        <Grid item xs={2}></Grid>
-        <Grid item xs={4}>
-          <Dice {...dice1} />
-        </Grid>
-        <Grid item xs={4}>
-          <Dice {...dice3} />
-        </Grid>
-        <Grid item xs={2}></Grid>
-      </Grid>
-      <Box sx={{ paddingTop: 3 }}>
-        <Button
-          variant="outlined"
-          size="large"
-          onClick={handleOnClick}
-          disabled={disabled}
-        >
-          おはまちこする
-        </Button>
-      </Box>
-    </>
+        <Box>
+          <Button
+            variant="outlined"
+            size="large"
+            onClick={handleOnClick}
+            disabled={disabled}
+          >
+            おはまちこする
+          </Button>
+        </Box>
+      </Stack>
+    </Box>
   );
 };
 
 const Home: NextPage = () => {
+  const VerticalHorizontalCenter = {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  };
+
   return (
     <React.Fragment>
       <Toaster />
-      <Container>
-        <Box
-          sx={{
-            ...positionOpt,
-            width: "100%",
-            height: "100vh",
-          }}
-        >
-          <Box
-            sx={{
-              ...positionOpt,
-              width: "100%",
-              height: "70vh",
-              p: 1,
-              m: 1,
-              bgcolor: "background.paper",
-              borderRadius: 1,
-              border: "1px solid #1C78D3",
-            }}
-          >
-            <DiceBox />
-          </Box>
-        </Box>
+      <Container
+        sx={{
+          ...VerticalHorizontalCenter,
+          width: "100%",
+          height: "100vh",
+        }}
+      >
+        <DiceBox />
       </Container>
     </React.Fragment>
   );
