@@ -143,6 +143,7 @@ const DiceBox = () => {
   const [dice2, setDice2] = useState<DiceProps>(defaultDices[2]);
   const [dice3, setDice3] = useState<DiceProps>(defaultDices[3]);
   const [dice4, setDice4] = useState<DiceProps>(defaultDices[4]);
+  const [count, setCount] = useState(0);
   const [disabled, setDisabled] = useState(false);
 
   const reset = () => {
@@ -165,7 +166,7 @@ const DiceBox = () => {
     });
   };
 
-  const counts = (map: Map<Face, number>, face: Face) => map.get(face) || 0;
+  const countFace = (map: Map<Face, number>, face: Face) => map.get(face) || 0;
 
   const buildHand = (faces: Face[]) => {
     const cnt = faces.reduce((map, face: Face) => {
@@ -177,7 +178,7 @@ const DiceBox = () => {
       // Not match but much !!!
       const much = hand.units.reduce((much, unit: [Face, number]) => {
         const [face, num] = unit;
-        return much && counts(cnt, face) >= num;
+        return much && countFace(cnt, face) >= num;
       }, true);
 
       return much;
@@ -213,6 +214,7 @@ const DiceBox = () => {
       }
 
       setDisabled(false);
+      setCount(count + 1);
     });
   };
 
@@ -269,6 +271,7 @@ const DiceBox = () => {
             おはまちこする
           </Button>
         </Box>
+        {/* <Box>{count}</Box> */}
       </Stack>
     </Box>
   );
