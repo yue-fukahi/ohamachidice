@@ -155,14 +155,14 @@ const DiceBox = () => {
   const roll = (
     dice: DiceProps,
     setDice: (props: DiceProps) => void,
-    ms: number
+    prev: Face[]
   ) => {
-    return new Promise<Face>((resolve) => {
+    return new Promise<Face[]>((resolve) => {
       setTimeout(() => {
         const i = random(dice.faces.length);
         setDice({ ...dice, selected: dice.faces[i] });
-        resolve(dice.faces[i]);
-      }, ms);
+        resolve([...prev, dice.faces[i]]);
+      }, 350);
     });
   };
 
@@ -191,31 +191,31 @@ const DiceBox = () => {
     reset();
     setDisabled(true);
 
-    Promise.all([
-      roll(dice0, setDice0, 350 * 1),
-      roll(dice1, setDice1, 350 * 2),
-      roll(dice2, setDice2, 350 * 3),
-      roll(dice3, setDice3, 350 * 4),
-      roll(dice4, setDice4, 350 * 5),
-    ]).then((values) => {
-      const hand = buildHand(
-        values.filter<Face>((face): face is Face => face !== undefined)
-      );
+    Promise.resolve([])
+      .then((values) => roll(dice0, setDice0, values))
+      .then((values) => roll(dice1, setDice1, values))
+      .then((values) => roll(dice2, setDice2, values))
+      .then((values) => roll(dice3, setDice3, values))
+      .then((values) => roll(dice4, setDice4, values))
+      .then((values) => {
+        const hand = buildHand(
+          values.filter<Face>((face): face is Face => face !== undefined)
+        );
 
-      if (hand) {
-        toast.success(hand.name, {
-          icon: hand.icon,
-          duration: 5000,
-          style: {
-            fontSize: "250%",
-            fontWeight: "200",
-          },
-        });
-      }
+        if (hand) {
+          toast.success(hand.name, {
+            icon: hand.icon,
+            duration: 5000,
+            style: {
+              fontSize: "250%",
+              fontWeight: "200",
+            },
+          });
+        }
 
-      setDisabled(false);
-      setCount(count + 1);
-    });
+        setDisabled(false);
+        setCount(count + 1);
+      });
   };
 
   return (
