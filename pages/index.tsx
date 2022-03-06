@@ -138,41 +138,41 @@ const DiceBox = () => {
     { faces: [Face.O, Face.Ha, Face.Ma, Face.Chi, Face.Ko, Face.Ko] },
   ];
 
-  const [dice0, setDice0] = useState<DiceProps>(defaultDices[0]);
-  const [dice1, setDice1] = useState<DiceProps>(defaultDices[1]);
-  const [dice2, setDice2] = useState<DiceProps>(defaultDices[2]);
-  const [dice3, setDice3] = useState<DiceProps>(defaultDices[3]);
-  const [dice4, setDice4] = useState<DiceProps>(defaultDices[4]);
+  const [dices, setDices] = useState(defaultDices);
   const [count, setCount] = useState(0);
   const [disabled, setDisabled] = useState(false);
 
   const reset = () => {
-    [setDice0, setDice1, setDice2, setDice3, setDice4].forEach((setDice, i) => {
-      setDice(defaultDices[i]);
+    return new Promise<DiceProps[]>((resolve) => {
+      setDisabled(true);
+      setDices(defaultDices);
+      resolve(defaultDices);
     });
   };
 
-  const roll = (
-    dice: DiceProps,
-    setDice: (props: DiceProps) => void,
-    prev: Face[]
-  ) => {
-    return new Promise<Face[]>((resolve) => {
+  const roll = (dices: DiceProps[], i: number) => {
+    return new Promise<DiceProps[]>((resolve) => {
       setTimeout(() => {
-        const i = random(dice.faces.length);
-        setDice({ ...dice, selected: dice.faces[i] });
-        resolve([...prev, dice.faces[i]]);
+        const dice = dices[i];
+        const x = random(dice.faces.length);
+        const newDices = dices.slice();
+        newDices[i] = { ...dice, selected: dice.faces[x] };
+        setDices(newDices);
+        resolve(newDices);
       }, 350);
     });
   };
 
   const countFace = (map: Map<Face, number>, face: Face) => map.get(face) || 0;
 
-  const buildHand = (faces: Face[]) => {
-    const cnt = faces.reduce((map, face: Face) => {
-      const v = map.get(face) || 0;
-      return map.set(face, v + 1);
-    }, new Map<Face, number>());
+  const buildHand = (dices: DiceProps[]) => {
+    const cnt = dices
+      .map((dice) => dice.selected)
+      .filter((face): face is Face => face !== undefined)
+      .reduce((map, face) => {
+        const v = map.get(face) || 0;
+        return map.set(face, v + 1);
+      }, new Map<Face, number>());
 
     const much = HandList.find((hand) => {
       // Not match but much !!!
@@ -188,19 +188,15 @@ const DiceBox = () => {
   };
 
   const handleOnClick = () => {
-    reset();
-    setDisabled(true);
-
-    Promise.resolve([])
-      .then((values) => roll(dice0, setDice0, values))
-      .then((values) => roll(dice1, setDice1, values))
-      .then((values) => roll(dice2, setDice2, values))
-      .then((values) => roll(dice3, setDice3, values))
-      .then((values) => roll(dice4, setDice4, values))
+    Promise.resolve()
+      .then(reset)
+      .then((values) => roll(values, 0))
+      .then((values) => roll(values, 1))
+      .then((values) => roll(values, 2))
+      .then((values) => roll(values, 3))
+      .then((values) => roll(values, 4))
       .then((values) => {
-        const hand = buildHand(
-          values.filter<Face>((face): face is Face => face !== undefined)
-        );
+        const hand = buildHand(values);
 
         if (hand) {
           toast.success(hand.name, {
@@ -245,21 +241,11 @@ const DiceBox = () => {
           OHAMACHI DICE
         </Box>
         <Grid container justifyContent="center" alignItems="center">
-          <Grid item xs={4}>
-            <Dice {...dice0} />
-          </Grid>
-          <Grid item xs={4}>
-            <Dice {...dice2} />
-          </Grid>
-          <Grid item xs={4}>
-            <Dice {...dice4} />
-          </Grid>
-          <Grid item xs={4}>
-            <Dice {...dice1} />
-          </Grid>
-          <Grid item xs={4}>
-            <Dice {...dice3} />
-          </Grid>
+          {dices.map((dice, i) => (
+            <Grid item key={i} xs={4}>
+              <Dice {...dice} />
+            </Grid>
+          ))}
         </Grid>
         <Box>
           <Button
