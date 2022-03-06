@@ -190,11 +190,15 @@ const DiceBox = () => {
   const handleOnClick = () => {
     Promise.resolve()
       .then(reset)
-      .then((values) => roll(values, 0))
-      .then((values) => roll(values, 1))
-      .then((values) => roll(values, 2))
-      .then((values) => roll(values, 3))
-      .then((values) => roll(values, 4))
+      .then(() =>
+        [...Array(dices.length)]
+          .map((_, i) => i)
+          .reduce(
+            (promise, i) =>
+              promise.then((values: DiceProps[]) => roll(values, i)),
+            Promise.resolve().then(reset)
+          )
+      )
       .then((values) => {
         const hand = buildHand(values);
 
