@@ -173,46 +173,54 @@ const DiceBox = () => {
         return map.set(face, v + 1);
       }, new Map<Face, number>());
 
-    const much = HandList.find((hand) => {
+    return HandList.map((hand) => {
       // Not match but much !!!
-      const much = hand.units.reduce((much, unit: [Face, number]) => {
-        const [face, num] = unit;
-        return much && countFace(cnt, face) >= num;
-      }, true);
+      const muches = hand.units.map(([face, num]: [Face, number]) => {
+        return Math.floor(countFace(cnt, face) / num);
+      });
 
-      return much;
+      return _.fill(_.range(_.min(muches) || 0), hand);
+    }).flat();
+  };
+
+  const notify = (hands: Hand[], hand: Hand) => {
+    return new Promise<Hand[]>((resolve) => {
+      setTimeout(() => {
+        const { name, icon } = hand;
+        toast.success(name, {
+          icon: icon,
+          duration: 5000,
+          style: {
+            fontSize: "250%",
+            fontWeight: "200",
+          },
+        });
+        resolve(hands);
+      }, 200);
     });
-
-    return much;
   };
 
   const handleOnClick = () => {
     Promise.resolve()
-      .then(reset)
       .then(() =>
-        _.shuffle(_.range(dices.length))
-          .reduce(
-            (promise, i) =>
-              promise.then((values: DiceProps[]) => roll(values, i)),
-            Promise.resolve().then(reset)
-          )
+        _.shuffle(_.range(dices.length)).reduce(
+          (promise, i) =>
+            promise.then((values: DiceProps[]) => roll(values, i)),
+          Promise.resolve().then(reset)
+        )
       )
       .then((values) => {
-        const hand = buildHand(values);
-
-        if (hand) {
-          toast.success(hand.name, {
-            icon: hand.icon,
-            duration: 5000,
-            style: {
-              fontSize: "250%",
-              fontWeight: "200",
-            },
+        const hands = buildHand(values);
+        hands
+          .reduce(
+            (promise, hand) =>
+              promise.then((hands: Hand[]) => notify(hands, hand)),
+            Promise.resolve().then(() => hands)
+          )
+          .then(() => {
+            setDisabled(false);
+            setCount(count + 1);
           });
-        }
-
-        setDisabled(false);
-        setCount(count + 1);
       });
   };
 
