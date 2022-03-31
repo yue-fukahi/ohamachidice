@@ -158,7 +158,7 @@ const DiceBox = () => {
         newDices[i] = { ...dice, selected: dice.faces[x] };
         setDices(newDices);
         resolve(newDices);
-      }, 350);
+      }, 250);
     });
   };
 
