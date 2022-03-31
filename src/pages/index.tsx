@@ -1,4 +1,5 @@
 import { Container, Box, Grid, Button, Stack } from "@mui/material";
+import * as _ from "lodash";
 import type { NextPage } from "next";
 import * as React from "react";
 import { CSSProperties, useState } from "react";
@@ -10,8 +11,6 @@ import FaceMaImg from "../../public/ma.svg";
 import FaceChiImg from "../../public/chi.svg";
 import FaceKoImg from "../../public/ko.svg";
 import EmptyImg from "../../public/empty.svg";
-
-const random = (size: number) => Math.floor(Math.random() * size);
 
 const Face = {
   O: "o",
@@ -154,7 +153,7 @@ const DiceBox = () => {
     return new Promise<DiceProps[]>((resolve) => {
       setTimeout(() => {
         const dice = dices[i];
-        const x = random(dice.faces.length);
+        const x = _.random(dice.faces.length - 1);
         const newDices = dices.slice();
         newDices[i] = { ...dice, selected: dice.faces[x] };
         setDices(newDices);
@@ -191,8 +190,7 @@ const DiceBox = () => {
     Promise.resolve()
       .then(reset)
       .then(() =>
-        [...Array(dices.length)]
-          .map((_, i) => i)
+        _.shuffle(_.range(dices.length))
           .reduce(
             (promise, i) =>
               promise.then((values: DiceProps[]) => roll(values, i)),
