@@ -2,42 +2,9 @@ import { Container, Box, Grid, Button, Stack } from "@mui/material";
 import * as _ from "lodash";
 import type { NextPage } from "next";
 import * as React from "react";
-import { CSSProperties, useState } from "react";
+import { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
-
-import FaceOImg from "../../public/o.svg";
-import FaceHaImg from "../../public/ha.svg";
-import FaceMaImg from "../../public/ma.svg";
-import FaceChiImg from "../../public/chi.svg";
-import FaceKoImg from "../../public/ko.svg";
-import EmptyImg from "../../public/empty.svg";
-
-const Face = {
-  O: "o",
-  Ha: "ha",
-  Ma: "ma",
-  Chi: "chi",
-  Ko: "ko",
-  Empty: "empty",
-} as const;
-type Face = typeof Face[keyof typeof Face];
-
-const FaceImage = ({ face, style }: { face?: Face; style?: CSSProperties }) => {
-  switch (face) {
-    case Face.O:
-      return <FaceOImg style={style} />;
-    case Face.Ha:
-      return <FaceHaImg style={style} />;
-    case Face.Ma:
-      return <FaceMaImg style={style} />;
-    case Face.Chi:
-      return <FaceChiImg style={style} />;
-    case Face.Ko:
-      return <FaceKoImg style={style} />;
-    default:
-      return <EmptyImg style={style} />;
-  }
-};
+import { Face, FaceImage } from "../components/faceImage";
 
 interface DiceProps {
   faces: Face[];
