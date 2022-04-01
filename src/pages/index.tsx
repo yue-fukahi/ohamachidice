@@ -4,14 +4,9 @@ import type { NextPage } from "next";
 import * as React from "react";
 import { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import { FaceImage } from "../components/faceImage";
+import { Dice, DiceProps } from "../components/dice";
 import { Face } from "../constants/face";
 import { HandName } from "../constants/handName";
-
-interface DiceProps {
-  faces: Face[];
-  selected?: Face;
-}
 
 interface Hand {
   name: HandName;
@@ -68,25 +63,6 @@ const HandList: Hand[] = [
     ],
   },
 ];
-
-const Dice = (props: DiceProps) => {
-  const imgStyle = {
-    width: "100%",
-    maxHeight: "150px",
-  };
-
-  return (
-    <Box
-      sx={{
-        justifyContent: "center",
-        alignItems: "center",
-        p: 1,
-      }}
-    >
-      <FaceImage face={props.selected} style={imgStyle} />
-    </Box>
-  );
-};
 
 const DiceBox = () => {
   const defaultDices: DiceProps[] = [
