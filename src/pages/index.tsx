@@ -1,10 +1,11 @@
-import { Container, Box, Grid, Button, Stack } from "@mui/material";
+import { Box, Button, Container, Grid, Stack } from "@mui/material";
 import * as _ from "lodash";
 import type { NextPage } from "next";
 import * as React from "react";
 import { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import { Face, FaceImage } from "../components/faceImage";
+import { FaceImage } from "../components/faceImage";
+import { Face } from "../constants/face";
 
 interface DiceProps {
   faces: Face[];
