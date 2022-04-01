@@ -6,20 +6,12 @@ import { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { FaceImage } from "../components/faceImage";
 import { Face } from "../constants/face";
+import { HandName } from "../constants/handName";
 
 interface DiceProps {
   faces: Face[];
   selected?: Face;
 }
-
-const HandName = {
-  Ohamachiko: "OHAMACHIKO",
-  Hakomachiko: "HAKOMACHIKO",
-  Machiko: "MACHIKO",
-  MaoMao: "MAOMAO",
-  Hamachi: "HAMACHI",
-} as const;
-type HandName = typeof HandName[keyof typeof HandName];
 
 interface Hand {
   name: HandName;
