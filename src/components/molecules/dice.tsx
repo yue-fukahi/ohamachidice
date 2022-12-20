@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 
-import { Face } from "../constants/face";
-import { FaceImage } from "./atoms/faceImage";
+import { Face } from "../../constants/face";
+import { FaceImage } from "../atoms/faceImage";
 
 interface DiceProps {
   faces: Face[];
@@ -11,7 +11,7 @@ interface DiceProps {
 const Dice = (props: DiceProps) => {
   const imgStyle = {
     width: "100%",
-    maxHeight: "150px",
+    maxHeight: "180px",
   };
 
   return (

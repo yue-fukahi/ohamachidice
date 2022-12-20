@@ -6,7 +6,7 @@ import { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { OhamachiButton } from "../components/atoms/ohamachiButton";
 import { Title } from "../components/atoms/title";
-import { Dice, DiceProps } from "../components/dice";
+import { Dice, DiceProps } from "../components/molecules/dice";
 import { Face } from "../constants/face";
 import { HandName } from "../constants/handName";
 
