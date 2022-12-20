@@ -5,6 +5,7 @@ import * as React from "react";
 import { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { Dice, DiceProps } from "../components/dice";
+import { Title } from "../components/atoms/title";
 import { Face } from "../constants/face";
 import { HandName } from "../constants/handName";
 
@@ -171,21 +172,13 @@ const DiceBox = () => {
       }}
     >
       <Stack
-        spacing={2}
+        spacing={3}
         sx={{
           justifyContent: "center",
           alignItems: "center",
         }}
       >
-        <Box
-          sx={{
-            fontSize: "200%",
-            fontWeight: "200",
-            textAlign: "center",
-          }}
-        >
-          OHAMACHI DICE
-        </Box>
+        <Title />
         <Grid container justifyContent="center" alignItems="center">
           {dices.map((dice, i) => (
             <Grid item key={i} xs={4}>
