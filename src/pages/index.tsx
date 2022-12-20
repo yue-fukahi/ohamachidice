@@ -4,8 +4,9 @@ import type { NextPage } from "next";
 import * as React from "react";
 import { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import { Dice, DiceProps } from "../components/dice";
+import { OhamachiButton } from "../components/atoms/ohamachiButton";
 import { Title } from "../components/atoms/title";
+import { Dice, DiceProps } from "../components/dice";
 import { Face } from "../constants/face";
 import { HandName } from "../constants/handName";
 
@@ -187,14 +188,7 @@ const DiceBox = () => {
           ))}
         </Grid>
         <Box>
-          <Button
-            variant="outlined"
-            size="large"
-            onClick={handleOnClick}
-            disabled={disabled}
-          >
-            おはまちこする
-          </Button>
+          <OhamachiButton disabled={disabled} onClick={handleOnClick} />
         </Box>
         {/* <Box>{count}</Box> */}
       </Stack>

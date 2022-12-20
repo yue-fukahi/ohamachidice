@@ -7,6 +7,15 @@ const theme = createTheme({
       fontSize: '3rem',
       fontWeight: 100,
     }
+  },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          fontSize: '1.5rem',
+        },
+      },
+    },
   }
 });
 
