@@ -179,7 +179,13 @@ const DiceBox = () => {
           alignItems: "center",
         }}
       >
-        <Title />
+        <Box
+          sx={{
+            textAlign: "center",
+          }}
+        >
+          <Title />
+        </Box>
         <Grid container justifyContent="center" alignItems="center">
           {dices.map((dice, i) => (
             <Grid item key={i} xs={4}>
