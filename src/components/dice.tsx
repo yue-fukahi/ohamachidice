@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 
 import { Face } from "../constants/face";
-import { FaceImage } from "./faceImage";
+import { FaceImage } from "./atoms/faceImage";
 
 interface DiceProps {
   faces: Face[];

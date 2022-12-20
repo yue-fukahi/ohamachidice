@@ -1,12 +1,12 @@
 import { CSSProperties } from "react";
-import { Face } from "../constants/face";
+import { Face } from "../../constants/face";
 
-import FaceOImg from "../../public/o.svg";
-import FaceHaImg from "../../public/ha.svg";
-import FaceMaImg from "../../public/ma.svg";
-import FaceChiImg from "../../public/chi.svg";
-import FaceKoImg from "../../public/ko.svg";
-import EmptyImg from "../../public/empty.svg";
+import FaceOImg from "../../../public/o.svg";
+import FaceHaImg from "../../../public/ha.svg";
+import FaceMaImg from "../../../public/ma.svg";
+import FaceChiImg from "../../../public/chi.svg";
+import FaceKoImg from "../../../public/ko.svg";
+import EmptyImg from "../../../public/empty.svg";
 
 const FaceImage = ({ face, style }: { face?: Face; style?: CSSProperties }) => {
   switch (face) {
