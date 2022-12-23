@@ -6,7 +6,7 @@ import { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { OhamachiButton } from "../components/atoms/ohamachiButton";
 import { Title } from "../components/atoms/title";
-import { Dice, DiceProps } from "../components/molecules/dice";
+import { Dice } from "../components/molecules/dice";
 import { Face } from "../constants/face";
 import { HandList } from "../constants/handList";
 import { useOhamachiko } from "../hooks/useOhamachiko";
@@ -15,6 +15,7 @@ import { Hand } from "../models/hand";
 
 const DiceBox = () => {
   const [disabled, setDisabled] = useState(false);
+  // const [counts, setCounts] = useState(0);
 
   const countFace = (map: Map<Face, number>, face: Face) => map.get(face) || 0;
 
@@ -45,7 +46,7 @@ const DiceBox = () => {
           icon: icon,
           duration: 5000,
           style: {
-            fontSize: "250%",
+            fontSize: "200%",
             fontWeight: "200",
           },
         });
@@ -66,12 +67,25 @@ const DiceBox = () => {
 
   const { diceBox, roll, reset } = useOhamachiko(defaultDices);
 
+  const handleOnRoll = (d: DiceBox, i: number) =>
+    new Promise<DiceBox>((resolve) => {
+      setTimeout(() => {
+        resolve(roll(d, i));
+      }, 250);
+    });
+
+  const handleOnReset = () =>
+    new Promise<DiceBox>((resolve) => {
+      setDisabled(true);
+      resolve(reset());
+    });
+
   const handleOnClick = () => {
     Promise.resolve()
       .then(() =>
         _.shuffle(_.range(diceBox.dices.length)).reduce(
-          (promise, i) => promise.then((d: DiceBox) => roll(d, i)),
-          Promise.resolve().then(reset)
+          (promise, i) => promise.then((d: DiceBox) => handleOnRoll(d, i)),
+          Promise.resolve().then(handleOnReset)
         )
       )
       .then((d) => {
@@ -83,8 +97,8 @@ const DiceBox = () => {
             Promise.resolve().then(() => hands)
           )
           .then(() => {
-            // setDisabled(false);
-            // setCount(count + 1);
+            setDisabled(false);
+            // setCounts(counts + 1);
           });
       });
   };
@@ -119,6 +133,7 @@ const DiceBox = () => {
       <Box>
         <OhamachiButton disabled={disabled} onClick={handleOnClick} />
       </Box>
+      {/* <Box>{counts}</Box> */}
     </Stack>
   );
 };
