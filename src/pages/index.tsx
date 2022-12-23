@@ -1,4 +1,4 @@
-import { Box, Button, Container, Grid, Stack } from "@mui/material";
+import { Box, Container, Grid, Stack, useMediaQuery } from "@mui/material";
 import * as _ from "lodash";
 import type { NextPage } from "next";
 import * as React from "react";
@@ -162,6 +162,9 @@ const DiceBox = () => {
       });
   };
 
+  const matches: boolean = useMediaQuery("(min-width:640px)");
+  const diceSize = matches ? "160px" : "80px";
+
   return (
     <Stack
       spacing={3}
@@ -181,8 +184,8 @@ const DiceBox = () => {
       </Box>
       <Grid container justifyContent="center" alignItems="center">
         {dices.map((dice, i) => (
-          <Grid item key={i} xs={4}>
-            <Dice {...dice} />
+          <Grid item key={i} xs>
+            <Dice {...dice} size={diceSize} />
           </Grid>
         ))}
       </Grid>

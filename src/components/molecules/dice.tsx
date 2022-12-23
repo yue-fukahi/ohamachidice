@@ -6,12 +6,15 @@ import { FaceImage } from "../atoms/faceImage";
 interface DiceProps {
   faces: Face[];
   selected?: Face;
+  size?: string;
 }
 
 const Dice = (props: DiceProps) => {
+  const size = props.size ?? "160px";
+
   const imgStyle = {
-    width: "100%",
-    maxHeight: "180px",
+    width: size,
+    height: size,
   };
 
   return (
