@@ -9,7 +9,7 @@ import { Title } from "../components/atoms/title";
 import { Dice } from "../components/molecules/dice";
 import { Face } from "../constants/face";
 import { HandList } from "../constants/handList";
-import { useOhamachiko } from "../hooks/useOhamachiko";
+import { useDiceBox } from "../hooks/useDiceBox";
 import { DiceBox } from "../models/diceBox";
 import { Hand } from "../models/hand";
 
@@ -65,7 +65,7 @@ const DiceBox = () => {
     ],
   };
 
-  const { diceBox, roll, reset } = useOhamachiko(defaultDices);
+  const { diceBox, roll, reset } = useDiceBox(defaultDices);
 
   const handleOnRoll = (d: DiceBox, i: number) =>
     new Promise<DiceBox>((resolve) => {

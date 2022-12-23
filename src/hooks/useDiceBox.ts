@@ -2,7 +2,7 @@ import * as _ from "lodash";
 import { useState } from "react"
 import { DiceBox } from "../models/diceBox"
 
-const useOhamachiko = (initialDiceBox: DiceBox) => {
+const useDiceBox = (initialDiceBox: DiceBox) => {
   const [diceBox, setDiceBox] = useState(initialDiceBox);
 
   const roll = (diceBox: DiceBox, i: number) => {
@@ -24,4 +24,4 @@ const useOhamachiko = (initialDiceBox: DiceBox) => {
 }
 
 
-export { useOhamachiko }
+export { useDiceBox }
