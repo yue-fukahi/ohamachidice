@@ -9,50 +9,21 @@ import { Title } from "../components/atoms/title";
 import { Dice, DiceProps } from "../components/molecules/dice";
 import { Face } from "../constants/face";
 import { HandList } from "../constants/handList";
+import { useOhamachiko } from "../hooks/useOhamachiko";
+import { DiceBox } from "../models/diceBox";
 import { Hand } from "../models/hand";
 
 const DiceBox = () => {
-  const defaultDices: DiceProps[] = [
-    { faces: [Face.O, Face.Ha, Face.Ma, Face.Chi, Face.Ko, Face.O] },
-    { faces: [Face.O, Face.Ha, Face.Ma, Face.Chi, Face.Ko, Face.Ha] },
-    { faces: [Face.O, Face.Ha, Face.Ma, Face.Chi, Face.Ko, Face.Ma] },
-    { faces: [Face.O, Face.Ha, Face.Ma, Face.Chi, Face.Ko, Face.Chi] },
-    { faces: [Face.O, Face.Ha, Face.Ma, Face.Chi, Face.Ko, Face.Ko] },
-  ];
-
-  const [dices, setDices] = useState(defaultDices);
-  const [count, setCount] = useState(0);
   const [disabled, setDisabled] = useState(false);
-
-  const reset = () => {
-    return new Promise<DiceProps[]>((resolve) => {
-      setDisabled(true);
-      setDices(defaultDices);
-      resolve(defaultDices);
-    });
-  };
-
-  const roll = (dices: DiceProps[], i: number) => {
-    return new Promise<DiceProps[]>((resolve) => {
-      setTimeout(() => {
-        const dice = dices[i];
-        const x = _.random(dice.faces.length - 1);
-        const newDices = dices.slice();
-        newDices[i] = { ...dice, selected: dice.faces[x] };
-        setDices(newDices);
-        resolve(newDices);
-      }, 250);
-    });
-  };
 
   const countFace = (map: Map<Face, number>, face: Face) => map.get(face) || 0;
 
-  const buildHand = (dices: DiceProps[]) => {
-    const cnt = dices
+  const buildHand = (diceBox: DiceBox) => {
+    const cnt = diceBox.dices
       .map((dice) => dice.selected)
       .filter((face): face is Face => face !== undefined)
       .reduce((map, face) => {
-        const v = map.get(face) || 0;
+        const v: number = map.get(face) || 0;
         return map.set(face, v + 1);
       }, new Map<Face, number>());
 
@@ -83,17 +54,28 @@ const DiceBox = () => {
     });
   };
 
+  const defaultDices: DiceBox = {
+    dices: [
+      { faces: [Face.O, Face.Ha, Face.Ma, Face.Chi, Face.Ko, Face.O] },
+      { faces: [Face.O, Face.Ha, Face.Ma, Face.Chi, Face.Ko, Face.Ha] },
+      { faces: [Face.O, Face.Ha, Face.Ma, Face.Chi, Face.Ko, Face.Ma] },
+      { faces: [Face.O, Face.Ha, Face.Ma, Face.Chi, Face.Ko, Face.Chi] },
+      { faces: [Face.O, Face.Ha, Face.Ma, Face.Chi, Face.Ko, Face.Ko] },
+    ],
+  };
+
+  const { diceBox, roll, reset } = useOhamachiko(defaultDices);
+
   const handleOnClick = () => {
     Promise.resolve()
       .then(() =>
-        _.shuffle(_.range(dices.length)).reduce(
-          (promise, i) =>
-            promise.then((values: DiceProps[]) => roll(values, i)),
+        _.shuffle(_.range(diceBox.dices.length)).reduce(
+          (promise, i) => promise.then((d: DiceBox) => roll(d, i)),
           Promise.resolve().then(reset)
         )
       )
-      .then((values) => {
-        const hands = buildHand(values);
+      .then((d) => {
+        const hands = buildHand(d);
         hands
           .reduce(
             (promise, hand) =>
@@ -101,8 +83,8 @@ const DiceBox = () => {
             Promise.resolve().then(() => hands)
           )
           .then(() => {
-            setDisabled(false);
-            setCount(count + 1);
+            // setDisabled(false);
+            // setCount(count + 1);
           });
       });
   };
@@ -128,7 +110,7 @@ const DiceBox = () => {
         <Title />
       </Box>
       <Grid container justifyContent="center" alignItems="center">
-        {dices.map((dice, i) => (
+        {diceBox.dices.map((dice, i) => (
           <Grid item key={i} xs>
             <Dice {...dice} size={diceSize} />
           </Grid>
