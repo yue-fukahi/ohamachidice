@@ -8,63 +8,8 @@ import { OhamachiButton } from "../components/atoms/ohamachiButton";
 import { Title } from "../components/atoms/title";
 import { Dice, DiceProps } from "../components/molecules/dice";
 import { Face } from "../constants/face";
-import { HandName } from "../constants/handName";
-
-interface Hand {
-  name: HandName;
-  icon: string;
-  units: [Face, number][];
-}
-
-const HandList: Hand[] = [
-  {
-    name: HandName.Ohamachiko,
-    icon: "🐰",
-    units: [
-      [Face.O, 1],
-      [Face.Ha, 1],
-      [Face.Ma, 1],
-      [Face.Chi, 1],
-      [Face.Ko, 1],
-    ],
-  },
-  {
-    name: HandName.Hakomachiko,
-    icon: "🐰",
-    units: [
-      [Face.Ha, 1],
-      [Face.Ma, 1],
-      [Face.Chi, 1],
-      [Face.Ko, 2],
-    ],
-  },
-  {
-    name: HandName.Machiko,
-    icon: "🐰",
-    units: [
-      [Face.Ma, 1],
-      [Face.Chi, 1],
-      [Face.Ko, 1],
-    ],
-  },
-  {
-    name: HandName.MaoMao,
-    icon: "😺",
-    units: [
-      [Face.Ma, 2],
-      [Face.O, 2],
-    ],
-  },
-  {
-    name: HandName.Hamachi,
-    icon: "🐟",
-    units: [
-      [Face.Ha, 1],
-      [Face.Ma, 1],
-      [Face.Chi, 1],
-    ],
-  },
-];
+import { HandList } from "../constants/handList";
+import { Hand } from "../models/hand";
 
 const DiceBox = () => {
   const defaultDices: DiceProps[] = [
