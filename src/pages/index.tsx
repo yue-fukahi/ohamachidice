@@ -163,42 +163,33 @@ const DiceBox = () => {
   };
 
   return (
-    <Box
+    <Stack
+      spacing={3}
       sx={{
+        justifyContent: "center",
+        alignItems: "center",
+        textAlign: "center",
         width: "100%",
         p: 2,
         bgcolor: "background.paper",
-        borderRadius: 1,
+        borderRadius: 3,
         border: "1px solid #1C78D3",
       }}
     >
-      <Stack
-        spacing={3}
-        sx={{
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Box
-          sx={{
-            textAlign: "center",
-          }}
-        >
-          <Title />
-        </Box>
-        <Grid container justifyContent="center" alignItems="center">
-          {dices.map((dice, i) => (
-            <Grid item key={i} xs={4}>
-              <Dice {...dice} />
-            </Grid>
-          ))}
-        </Grid>
-        <Box>
-          <OhamachiButton disabled={disabled} onClick={handleOnClick} />
-        </Box>
-        {/* <Box>{count}</Box> */}
-      </Stack>
-    </Box>
+      <Box>
+        <Title />
+      </Box>
+      <Grid container justifyContent="center" alignItems="center">
+        {dices.map((dice, i) => (
+          <Grid item key={i} xs={4}>
+            <Dice {...dice} />
+          </Grid>
+        ))}
+      </Grid>
+      <Box>
+        <OhamachiButton disabled={disabled} onClick={handleOnClick} />
+      </Box>
+    </Stack>
   );
 };
 
