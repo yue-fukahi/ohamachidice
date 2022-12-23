@@ -8,35 +8,14 @@ import { OhamachiButton } from "../components/atoms/ohamachiButton";
 import { Title } from "../components/atoms/title";
 import { Dice } from "../components/molecules/dice";
 import { Face } from "../constants/face";
-import { HandList } from "../constants/handList";
 import { useDiceBox } from "../hooks/useDiceBox";
+import { useRoleCalculation } from "../hooks/useRoleCalculation";
 import { DiceBox } from "../models/diceBox";
 import { Hand } from "../models/hand";
 
-const DiceBox = () => {
+const PlayFiled = () => {
   const [disabled, setDisabled] = useState(false);
   // const [counts, setCounts] = useState(0);
-
-  const countFace = (map: Map<Face, number>, face: Face) => map.get(face) || 0;
-
-  const buildHand = (diceBox: DiceBox) => {
-    const cnt = diceBox.dices
-      .map((dice) => dice.selected)
-      .filter((face): face is Face => face !== undefined)
-      .reduce((map, face) => {
-        const v: number = map.get(face) || 0;
-        return map.set(face, v + 1);
-      }, new Map<Face, number>());
-
-    return HandList.map((hand) => {
-      // Not match but much !!!
-      const muches = hand.units.map(([face, num]: [Face, number]) => {
-        return Math.floor(countFace(cnt, face) / num);
-      });
-
-      return _.fill(_.range(_.min(muches) || 0), hand);
-    }).flat();
-  };
 
   const notify = (hands: Hand[], hand: Hand) => {
     return new Promise<Hand[]>((resolve) => {
@@ -66,6 +45,7 @@ const DiceBox = () => {
   };
 
   const { diceBox, roll, reset } = useDiceBox(defaultDices);
+  const { roleCalc } = useRoleCalculation();
 
   const handleOnRoll = (d: DiceBox, i: number) =>
     new Promise<DiceBox>((resolve) => {
@@ -89,7 +69,7 @@ const DiceBox = () => {
         )
       )
       .then((d) => {
-        const hands = buildHand(d);
+        const hands = roleCalc(d);
         hands
           .reduce(
             (promise, hand) =>
@@ -155,7 +135,7 @@ const Home: NextPage = () => {
           height: "100vh",
         }}
       >
-        <DiceBox />
+        <PlayFiled />
       </Container>
     </React.Fragment>
   );
