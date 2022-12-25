@@ -1,4 +1,4 @@
-import { Box, Grid, Stack, useMediaQuery } from "@mui/material";
+import { Box, Grid, Stack, Typography, useMediaQuery } from "@mui/material";
 import * as _ from "lodash";
 import * as React from "react";
 import { useState } from "react";
@@ -37,14 +37,7 @@ const PlayFiled = () => {
     return new Promise<Hand[]>((resolve) => {
       setTimeout(() => {
         const { name, icon } = hand;
-        toast.success(name, {
-          icon: icon,
-          duration: 5000,
-          style: {
-            fontSize: "200%",
-            fontWeight: "200",
-          },
-        });
+        toast(() => <Typography variant="h2">{`${icon} ${name}`}</Typography>);
         resolve(hands);
       }, 200);
     });

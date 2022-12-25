@@ -15,6 +15,7 @@
     "@material-ui/icons": "^4.11.3",
     "@material-ui/lab": "^4.0.0-alpha.60",
     "@mui/material": "^5.11.1",
+    "@next/font": "^13.1.1",
     "@types/lodash": "^4.14.191",
     "lodash": "^4.17.21",
     "next": "13.0.7",
