@@ -14,6 +14,7 @@ const HandList: Hand[] = [
       [Face.Chi, 1],
       [Face.Ko, 1],
     ],
+    extraDice: true,
   },
   {
     name: HandName.Hakomachiko,

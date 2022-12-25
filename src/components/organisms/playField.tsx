@@ -4,7 +4,9 @@ import * as React from "react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { Face } from "../../constants/face";
+import { HandName } from "../../constants/handName";
 import { useDiceBox } from "../../hooks/useDiceBox";
+import { useDiceMaker } from "../../hooks/useDiceMaker";
 import { useRoleCalculation } from "../../hooks/useRoleCalculation";
 import { DiceBox } from "../../models/diceBox";
 import { Hand } from "../../models/hand";
@@ -15,6 +17,21 @@ import { Dice } from "../molecules/dice";
 const PlayFiled = () => {
   const [disabled, setDisabled] = useState(false);
   // const [counts, setCounts] = useState(0);
+
+  const { makeDice } = useDiceMaker();
+
+  const defaultDices: DiceBox = {
+    dices: [
+      makeDice([Face.O]),
+      makeDice([Face.Ha]),
+      makeDice([Face.Ma]),
+      makeDice([Face.Chi]),
+      makeDice([Face.Ko]),
+    ],
+  };
+
+  const { diceBox, roll, reset, push, pop } = useDiceBox(defaultDices);
+  const { roleCalc } = useRoleCalculation();
 
   const notify = (hands: Hand[], hand: Hand) => {
     return new Promise<Hand[]>((resolve) => {
@@ -32,19 +49,6 @@ const PlayFiled = () => {
       }, 200);
     });
   };
-
-  const defaultDices: DiceBox = {
-    dices: [
-      { faces: [Face.O, Face.Ha, Face.Ma, Face.Chi, Face.Ko, Face.O] },
-      { faces: [Face.O, Face.Ha, Face.Ma, Face.Chi, Face.Ko, Face.Ha] },
-      { faces: [Face.O, Face.Ha, Face.Ma, Face.Chi, Face.Ko, Face.Ma] },
-      { faces: [Face.O, Face.Ha, Face.Ma, Face.Chi, Face.Ko, Face.Chi] },
-      { faces: [Face.O, Face.Ha, Face.Ma, Face.Chi, Face.Ko, Face.Ko] },
-    ],
-  };
-
-  const { diceBox, roll, reset } = useDiceBox(defaultDices);
-  const { roleCalc } = useRoleCalculation();
 
   const handleOnRoll = (d: DiceBox, i: number) =>
     new Promise<DiceBox>((resolve) => {
@@ -75,7 +79,13 @@ const PlayFiled = () => {
               promise.then((hands: Hand[]) => notify(hands, hand)),
             Promise.resolve().then(() => hands)
           )
-          .then(() => {
+          .then((x) => {
+            if (hands.length === 0) {
+              pop(d);
+            } else if (hands.some((h) => h.extraDice)) {
+              push(d, makeDice());
+            }
+
             setDisabled(false);
             // setCounts(counts + 1);
           });

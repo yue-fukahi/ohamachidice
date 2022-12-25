@@ -1,9 +1,10 @@
 import * as _ from "lodash";
 import { useState } from "react"
-import { DiceBox } from "../models/diceBox"
+import { Dice, DiceBox } from "../models/diceBox"
 
 const useDiceBox = (initialDiceBox: DiceBox) => {
   const [diceBox, setDiceBox] = useState(initialDiceBox);
+  const [defaultSize] = useState(initialDiceBox.dices.length);
 
   const roll = (diceBox: DiceBox, i: number) => {
     const dice = diceBox.dices[i];
@@ -20,7 +21,23 @@ const useDiceBox = (initialDiceBox: DiceBox) => {
     return { dices: newDices };
   };
 
-  return { diceBox, roll, reset }
+  const push = (diceBox: DiceBox, newDice: Dice) => {
+    const box = { dices: [...diceBox.dices, newDice] }
+    setDiceBox(box);
+    return box
+  }
+
+  const pop = (diceBox: DiceBox) => {
+    if (diceBox.dices.length > defaultSize) {
+      diceBox.dices.pop();
+      const box = { dices: diceBox.dices }
+      setDiceBox(box);
+      return box
+    }
+    return diceBox;
+  }
+
+  return { diceBox, roll, push, pop, reset }
 }
 
 

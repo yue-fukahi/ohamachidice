@@ -5,6 +5,7 @@ interface Hand {
   name: HandName;
   icon: string;
   units: [Face, number][];
+  extraDice?: boolean;
 }
 
 export type { Hand }

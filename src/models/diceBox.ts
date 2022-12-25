@@ -9,4 +9,4 @@ interface DiceBox {
   dices: Dice[];
 }
 
-export type { DiceBox }
+export type { DiceBox, Dice }
