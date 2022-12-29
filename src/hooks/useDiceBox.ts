@@ -24,22 +24,6 @@ const useDiceBox = (initialDiceBox: DiceBox) => {
     return { dices: newDices };
   };
 
-  const push = (diceBox: DiceBox, newDice: Dice) => {
-    const box = { dices: [...diceBox.dices, newDice] }
-    setDiceBox(box);
-    return box
-  }
-
-  const pop = (diceBox: DiceBox) => {
-    if (diceBox.dices.length > defaultSize) {
-      diceBox.dices.pop();
-      const box = { dices: diceBox.dices }
-      setDiceBox(box);
-      return box
-    }
-    return diceBox;
-  }
-
   const update = (diceBox: DiceBox, hands: Hand[]) => {
     const updated = diceBox.dices
       .map((dice: Dice) => ({
@@ -57,7 +41,7 @@ const useDiceBox = (initialDiceBox: DiceBox) => {
     return box;
   }
 
-  return { diceBox, roll, push, pop, update, reset }
+  return { diceBox, roll, update, reset }
 }
 
 

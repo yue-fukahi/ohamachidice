@@ -1,11 +1,9 @@
 import { Box, Grid, Stack, Typography, useMediaQuery } from "@mui/material";
 import * as _ from "lodash";
-import { update } from "lodash";
 import * as React from "react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { Face } from "../../constants/face";
-import { HandName } from "../../constants/handName";
 import { useDiceBox } from "../../hooks/useDiceBox";
 import { useDiceMaker } from "../../hooks/useDiceMaker";
 import { useRoleCalculation } from "../../hooks/useRoleCalculation";
@@ -17,7 +15,7 @@ import { Dice } from "../molecules/dice";
 
 const PlayFiled = () => {
   const [disabled, setDisabled] = useState(false);
-  // const [counts, setCounts] = useState(0);
+  const [counts, setCounts] = useState(0);
 
   const { makeDice } = useDiceMaker();
 
@@ -67,23 +65,53 @@ const PlayFiled = () => {
       )
       .then((d) => {
         const hands = roleCalc(d);
-        hands
+        return hands
           .reduce(
             (promise, hand) =>
               promise.then((hands: Hand[]) => notify(hands, hand)),
             Promise.resolve().then(() => hands)
           )
-          .then((x) => {
-            update(d, hands);
-
-            setDisabled(false);
-            // setCounts(counts + 1);
-          });
+          .then((x) => update(d, hands));
+      })
+      .then((d: DiceBox) => {
+        setDisabled(d.dices.length <= 0);
+        setCounts(counts + 1);
       });
   };
 
   const matches: boolean = useMediaQuery("(min-width:640px)");
   const diceSize = matches ? "160px" : "80px";
+  const isGameOver = diceBox.dices.length <= 0;
+
+  const Content = () =>
+    !isGameOver ? (
+      <>
+        <Grid container justifyContent="center" alignItems="center">
+          {diceBox.dices.map((dice, i) => (
+            <Grid item key={i} xs>
+              <Dice {...dice} size={diceSize} />
+            </Grid>
+          ))}
+        </Grid>
+        <Box>
+          <OhamachiButton disabled={disabled} onClick={handleOnClick} />
+        </Box>
+        <Box>OHAMACHI COUNTER: {counts}</Box>
+      </>
+    ) : (
+      <>
+        <Box
+          sx={{
+            backgroundColor: "primary.light",
+            width: "100%",
+            paddingY: "4px",
+          }}
+        >
+          GAME OVER
+        </Box>
+        <Box>{counts}回おはまちこした！</Box>
+      </>
+    );
 
   return (
     <Stack
@@ -102,17 +130,7 @@ const PlayFiled = () => {
       <Box>
         <Title />
       </Box>
-      <Grid container justifyContent="center" alignItems="center">
-        {diceBox.dices.map((dice, i) => (
-          <Grid item key={i} xs>
-            <Dice {...dice} size={diceSize} />
-          </Grid>
-        ))}
-      </Grid>
-      <Box>
-        <OhamachiButton disabled={disabled} onClick={handleOnClick} />
-      </Box>
-      {/* <Box>{counts}</Box> */}
+      <Content />
     </Stack>
   );
 };
