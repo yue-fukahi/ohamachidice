@@ -14,7 +14,7 @@ const HandList: Hand[] = [
       [Face.Chi, 1],
       [Face.Ko, 1],
     ],
-    extraDice: true,
+    life: 7,
   },
   {
     name: HandName.Hakomachiko,
@@ -25,6 +25,7 @@ const HandList: Hand[] = [
       [Face.Chi, 1],
       [Face.Ko, 2],
     ],
+    life: 5,
   },
   {
     name: HandName.Machiko,
@@ -34,6 +35,7 @@ const HandList: Hand[] = [
       [Face.Chi, 1],
       [Face.Ko, 1],
     ],
+    life: 3,
   },
   {
     name: HandName.MaoMao,
@@ -42,6 +44,7 @@ const HandList: Hand[] = [
       [Face.Ma, 2],
       [Face.O, 2],
     ],
+    life: 4,
   },
   {
     name: HandName.Hamachi,
@@ -51,6 +54,7 @@ const HandList: Hand[] = [
       [Face.Ma, 1],
       [Face.Chi, 1],
     ],
+    life: 3,
   },
 ];
 

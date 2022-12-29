@@ -1,5 +1,6 @@
 import { Box, Grid, Stack, Typography, useMediaQuery } from "@mui/material";
 import * as _ from "lodash";
+import { update } from "lodash";
 import * as React from "react";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -30,7 +31,7 @@ const PlayFiled = () => {
     ],
   };
 
-  const { diceBox, roll, reset, push, pop } = useDiceBox(defaultDices);
+  const { diceBox, roll, reset, update } = useDiceBox(defaultDices);
   const { roleCalc } = useRoleCalculation();
 
   const notify = (hands: Hand[], hand: Hand) => {
@@ -73,11 +74,7 @@ const PlayFiled = () => {
             Promise.resolve().then(() => hands)
           )
           .then((x) => {
-            if (hands.length === 0) {
-              pop(d);
-            } else if (hands.some((h) => h.extraDice)) {
-              push(d, makeDice());
-            }
+            update(d, hands);
 
             setDisabled(false);
             // setCounts(counts + 1);

@@ -1,10 +1,13 @@
 import * as _ from "lodash";
 import { useState } from "react"
 import { Dice, DiceBox } from "../models/diceBox"
+import { Hand } from "../models/hand";
+import { useDiceMaker } from "./useDiceMaker";
 
 const useDiceBox = (initialDiceBox: DiceBox) => {
   const [diceBox, setDiceBox] = useState(initialDiceBox);
   const [defaultSize] = useState(initialDiceBox.dices.length);
+  const { makeDice } = useDiceMaker();
 
   const roll = (diceBox: DiceBox, i: number) => {
     const dice = diceBox.dices[i];
@@ -37,7 +40,24 @@ const useDiceBox = (initialDiceBox: DiceBox) => {
     return diceBox;
   }
 
-  return { diceBox, roll, push, pop, reset }
+  const update = (diceBox: DiceBox, hands: Hand[]) => {
+    const updated = diceBox.dices
+      .map((dice: Dice) => ({
+        ...dice,
+        life: dice.life - 1,
+      }))
+      .filter((dice: Dice) => dice.life > 0);
+
+    const newDices = hands.map((hand: Hand) =>
+      makeDice([], hand.life, hand.icon)
+    )
+
+    const box = { dices: [...updated, ...newDices] };
+    setDiceBox(box);
+    return box;
+  }
+
+  return { diceBox, roll, push, pop, update, reset }
 }
 
 
