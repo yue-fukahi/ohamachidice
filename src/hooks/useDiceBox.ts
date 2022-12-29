@@ -5,8 +5,8 @@ import { Hand } from "../models/hand";
 import { useDiceMaker } from "./useDiceMaker";
 
 const useDiceBox = (initialDiceBox: DiceBox) => {
+  const [defaultDiceBox] = useState(initialDiceBox);
   const [diceBox, setDiceBox] = useState(initialDiceBox);
-  const [defaultSize] = useState(initialDiceBox.dices.length);
   const { makeDice } = useDiceMaker();
 
   const roll = (diceBox: DiceBox, i: number) => {
@@ -41,7 +41,11 @@ const useDiceBox = (initialDiceBox: DiceBox) => {
     return box;
   }
 
-  return { diceBox, roll, update, reset }
+  const restart = () => {
+    setDiceBox(defaultDiceBox);
+  }
+
+  return { diceBox, roll, update, reset, restart }
 }
 
 

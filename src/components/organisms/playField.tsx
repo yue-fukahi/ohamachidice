@@ -1,4 +1,11 @@
-import { Box, Grid, Stack, Typography, useMediaQuery } from "@mui/material";
+import {
+  Box,
+  Button,
+  Grid,
+  Stack,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
 import * as _ from "lodash";
 import * as React from "react";
 import { useState } from "react";
@@ -29,7 +36,7 @@ const PlayFiled = () => {
     ],
   };
 
-  const { diceBox, roll, reset, update } = useDiceBox(defaultDices);
+  const { diceBox, roll, reset, update, restart } = useDiceBox(defaultDices);
   const { roleCalc } = useRoleCalculation();
 
   const notify = (hands: Hand[], hand: Hand) => {
@@ -73,10 +80,15 @@ const PlayFiled = () => {
           )
           .then((x) => update(d, hands));
       })
-      .then((d: DiceBox) => {
-        setDisabled(d.dices.length <= 0);
+      .then(() => {
+        setDisabled(false);
         setCounts(counts + 1);
       });
+  };
+
+  const handleOnRestart = () => {
+    restart();
+    setCounts(0);
   };
 
   const matches: boolean = useMediaQuery("(min-width:640px)");
@@ -110,6 +122,9 @@ const PlayFiled = () => {
           GAME OVER
         </Box>
         <Box>{counts}回おはまちこした！</Box>
+        <Button variant="outlined" onClick={handleOnRestart}>
+          もかもかもか！
+        </Button>
       </>
     );
 
