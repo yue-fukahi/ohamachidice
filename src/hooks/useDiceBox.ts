@@ -32,7 +32,7 @@ const useDiceBox = (initialDiceBox: DiceBox) => {
       }))
       .filter((dice: Dice) => dice.life > 0);
 
-    const newDices = hands.map((hand: Hand) =>
+    const newDices = _.uniq(hands).map((hand: Hand) =>
       makeDice([], hand.life, hand.icon)
     )
 
