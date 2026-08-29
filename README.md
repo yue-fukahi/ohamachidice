@@ -12,3 +12,7 @@ OHAMACHI DICE は NKODICE をリスペクトし開発したサイコロゲーム
         <img src="./public/reademe-button.png">
     </a>
 </p>
+
+## 開発
+
+開発環境の準備は [DEVELOPMENT.md](./DEVELOPMENT.md) を参照してください。
