@@ -41,3 +41,5 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
+# Next.js が自動生成するため追跡しない（公式ドキュメントの推奨）
+next-env.d.ts

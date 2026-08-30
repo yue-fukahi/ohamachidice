@@ -1,6 +1,7 @@
 /** @type {import("next").NextConfig} */
 
 const urlPrefix = process.env.URL_PREFIX ? "/" + process.env.URL_PREFIX : "";
+
 const nextConfig = {
   assetPrefix: urlPrefix,
   basePath: urlPrefix,
@@ -9,17 +10,19 @@ const nextConfig = {
 
   reactStrictMode: true,
   images: {
+    // SVG を @svgr/webpack で React コンポーネントとして扱うため、
+    // Next.js の静的画像インポートを無効にする
     disableStaticImages: true,
   },
 
-  webpack: (config) => {
-    config.module.rules.push({
-      test: /\.svg$/,
-      use: ['@svgr/webpack'],
-    });
-
-    return config
+  turbopack: {
+    rules: {
+      "*.svg": {
+        loaders: ["@svgr/webpack"],
+        as: "*.js",
+      },
+    },
   },
-}
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

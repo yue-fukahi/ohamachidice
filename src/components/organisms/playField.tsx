@@ -95,38 +95,37 @@ const PlayFiled = () => {
   const diceSize = matches ? "160px" : "80px";
   const isGameOver = diceBox.dices.length <= 0;
 
-  const Content = () =>
-    !isGameOver ? (
-      <>
-        <Grid container justifyContent="center" alignItems="center">
-          {diceBox.dices.map((dice, i) => (
-            <Grid item key={i} xs>
-              <Dice {...dice} size={diceSize} />
-            </Grid>
-          ))}
-        </Grid>
-        <Box>
-          <OhamachiButton disabled={disabled} onClick={handleOnClick} />
-        </Box>
-        <Box>OHAMACHI COUNTER: {counts}</Box>
-      </>
-    ) : (
-      <>
-        <Box
-          sx={{
-            backgroundColor: "primary.light",
-            width: "100%",
-            paddingY: "4px",
-          }}
-        >
-          GAME OVER
-        </Box>
-        <Box>{counts}回おはまちこした！</Box>
-        <Button variant="outlined" onClick={handleOnRestart}>
-          もかもかもか！
-        </Button>
-      </>
-    );
+  const content = !isGameOver ? (
+    <>
+      <Grid container sx={{ justifyContent: "center", alignItems: "center" }}>
+        {diceBox.dices.map((dice, i) => (
+          <Grid key={i} size="grow">
+            <Dice {...dice} size={diceSize} />
+          </Grid>
+        ))}
+      </Grid>
+      <Box>
+        <OhamachiButton disabled={disabled} onClick={handleOnClick} />
+      </Box>
+      <Box>OHAMACHI COUNTER: {counts}</Box>
+    </>
+  ) : (
+    <>
+      <Box
+        sx={{
+          backgroundColor: "primary.light",
+          width: "100%",
+          paddingY: "4px",
+        }}
+      >
+        GAME OVER
+      </Box>
+      <Box>{counts}回おはまちこした！</Box>
+      <Button variant="outlined" onClick={handleOnRestart}>
+        もかもかもか！
+      </Button>
+    </>
+  );
 
   return (
     <Stack
@@ -145,7 +144,7 @@ const PlayFiled = () => {
       <Box>
         <Title />
       </Box>
-      <Content />
+      {content}
     </Stack>
   );
 };
