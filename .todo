@@ -1,0 +1,21 @@
+# TODO
+
+## App Router への移行
+
+Next.js 16 では App Router が標準だが、今は Pages Router (`src/pages/`) のまま運用している。
+1 ページだけのゲームなので Server Components やレイアウト分割の利点が薄く、
+最新化の際は移行を見送った（2026-08-29）。
+
+移行するときの作業:
+
+- `src/pages/_app.tsx` を `src/app/layout.tsx` に分解する
+  - `<html>` / `<body>` を自前で書く
+  - `metadata` エクスポートで title などを定義する
+- `src/pages/index.tsx` を `src/app/page.tsx` にする
+  - useState / useMediaQuery を使うので `"use client"` が必要
+- MUI + emotion の App Router 向けセットアップを入れる
+  - `@mui/material-nextjs` の `AppRouterCacheProvider` を layout に入れる
+  - ThemeProvider を Client Component として切り出す
+- `output: "export"` のまま静的エクスポートできることを確認する
+
+参考: https://nextjs.org/docs/app/guides/migrating/app-router-migration

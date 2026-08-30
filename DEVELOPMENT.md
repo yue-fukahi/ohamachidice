@@ -1,11 +1,11 @@
 # 開発ガイド
 
 個人開発のためのメモ。**自分が手を動かす必要のある作業**だけをまとめている。
-コマンドやディレクトリ構成、ビルド・デプロイの実行手順、コミットの規約は Claude 向けの [CLAUDE.md](./CLAUDE.md) に書いてある。
+コマンドやディレクトリ構成、デプロイの仕組み、コミットの規約は Claude 向けの [CLAUDE.md](./CLAUDE.md) に書いてある。
 
 ## 環境の用意（新しいマシンでの初回のみ）
 
-Node.js 16.14.0 が必要。バージョンは `package.json` の `volta` フィールドで固定している。
+Node.js 24.19.0 が必要。バージョンは `package.json` の `volta` フィールドで固定している。
 
 ```bash
 curl https://get.volta.sh | bash   # 未インストールなら
@@ -14,7 +14,7 @@ cd ohamachidice
 npm ci
 ```
 
-Volta を入れておけばリポジトリに入った時点で自動的に 16.14.0 へ切り替わる。使わない場合は手動で同じバージョンを用意する。
+Volta を入れておけばリポジトリに入った時点で自動的に 24.19.0 へ切り替わる。使わない場合は手動で同じバージョンを用意する。
 
 ## 動作確認
 
@@ -24,7 +24,12 @@ npm run dev
 
 <http://localhost:11451> をブラウザで開く。ダイスの見た目や当たり判定、レスポンシブの挙動は実際に触らないと分からないので、変更後はここで確認する。
 
-開発サーバーでは `URL_PREFIX` が未設定なので `basePath` が空になり、ルート直下で動く。本番（`https://yue-fukahi.github.io/ohamachidice/`）とはパスが違うため、リンクや画像パスの問題は本番でしか出ないことがある。
+開発サーバーは `basePath` が空でルート直下で動く。本番（`https://yue-fukahi.github.io/ohamachidice/`）とはパスが違うため、リンクや画像パスの問題は本番でしか出ないことがある。本番と同じ条件で確かめたいときは:
+
+```bash
+npm run build
+npx serve out   # /ohamachidice 付きのパスで配信される点に注意
+```
 
 ## 出目の絵柄を変更する
 
@@ -35,11 +40,20 @@ npm run dev
 
 `.svg` を直接編集すると次に `.drawio` から書き出したときに上書きされるので、必ず原本の `.drawio` を直す。
 
-## GitHub Pages の設定
+## デプロイ
 
-リポジトリの Settings → Pages で以下の設定になっていることが前提。変更していなければ触る必要はない。
+`main` に push すれば GitHub Actions がビルドして公開する。手作業は push だけ。
 
-- Source: Deploy from a branch
-- Branch: `main` / `/docs`
+進捗と失敗はリポジトリの **Actions** タブで確認する。反映は push から 1〜2 分程度。
 
-push 後、数十秒〜数分で <https://yue-fukahi.github.io/ohamachidice/> に反映される。反映されない、あるいは CSS が当たっていない場合は `docs/.nojekyll` が消えていないかを疑う。
+### GitHub Pages の設定
+
+リポジトリの Settings → Pages が以下になっていることが前提。
+
+- **Source: GitHub Actions**
+
+以前の「Deploy from a branch (`main` / `/docs`)」から変更が必要。ビルド成果物 (`docs/`) をコミットする運用はやめたため、この設定のままだとデプロイされない。
+
+## TODO
+
+積み残しは [.todo](./.todo) に書いてある。
