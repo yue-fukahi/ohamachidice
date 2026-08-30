@@ -33,10 +33,10 @@ npx serve out   # /ohamachidice 付きのパスで配信される点に注意
 
 ## 出目の絵柄を変更する
 
-`public/` の SVG は [draw.io](https://app.diagrams.net/) で作成している。
+`public/` の SVG は [draw.io](https://app.diagrams.net/) で作成している。原本の `.drawio` は `assets/` に置いてある（サイトに配信しないため `public/` から出した）。
 
-1. `public/*.drawio` を draw.io で開いて編集する
-2. 同名の `.svg` として同じ場所に書き出す
+1. `assets/*.drawio` を draw.io で開いて編集する
+2. 同名の `.svg` として `public/` に書き出す
 
 `.svg` を直接編集すると次に `.drawio` から書き出したときに上書きされるので、必ず原本の `.drawio` を直す。
 

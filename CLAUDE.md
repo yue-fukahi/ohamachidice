@@ -36,13 +36,15 @@ src/
 ├── constants/     face, handList, handName
 └── styles/        MUI のテーマ定義
 styles/            グローバル CSS / CSS Modules
-public/            画像素材（.drawio が原本、.svg が書き出し）
+assets/            画像素材の原本（.drawio。サイトには配信しない）
+public/            そのまま配信される静的ファイル（.svg / .png / favicon）
 out/               ビルド成果物（gitignore 済み。手で編集しない）
 .github/workflows/ GitHub Pages へのデプロイ
 ```
 
 - コンポーネントを追加するときは Atomic Design の粒度に合わせて `atoms` / `molecules` / `organisms` に置く。
-- `public/*.svg` は `@svgr/webpack` により React コンポーネントとして import される。SVG そのものは編集せず、`.drawio` からの書き出しを前提にする。
+- `public/*.svg` は `@svgr/webpack` により React コンポーネントとして import される。SVG そのものは編集せず、`assets/*.drawio` からの書き出しを前提にする。
+- `.drawio` は原本であってサイトに配信する必要がないため、`public/` ではなく `assets/` に置く。
 - `out/` はビルド成果物なので、ここへの直接の変更は次のビルドで失われる。リポジトリにはコミットしない。
 - SVG は Turbopack の `turbopack.rules`（`next.config.js`）で `@svgr/webpack` に流している。
 
