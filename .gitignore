@@ -1,8 +1,3 @@
-/docs/ohamachidice
-/docs/*.drawio
-/docs/*.png
-/docs/*.svg
-
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
@@ -15,6 +10,8 @@
 
 # next.js
 /.next/
+
+# 静的エクスポートの出力先（GitHub Actions でビルドするためコミットしない）
 /out/
 
 # production

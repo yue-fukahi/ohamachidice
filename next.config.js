@@ -1,12 +1,14 @@
 /** @type {import("next").NextConfig} */
 
-const urlPrefix = process.env.URL_PREFIX ? "/" + process.env.URL_PREFIX : "";
+// GitHub Pages のプロジェクトページ（/ohamachidice 配下）で配信するため、
+// 本番ビルドのみパスのプレフィックスを付ける。開発サーバーはルート直下で動く。
+const basePath = process.env.NODE_ENV === "production" ? "/ohamachidice" : "";
 
 const nextConfig = {
-  assetPrefix: urlPrefix,
-  basePath: urlPrefix,
+  output: "export",
+  basePath,
+  assetPrefix: basePath,
   trailingSlash: true,
-  publicRuntimeConfig: { urlPrefix },
 
   reactStrictMode: true,
   images: {
