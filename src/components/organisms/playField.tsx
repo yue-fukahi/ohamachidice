@@ -99,7 +99,7 @@ const PlayFiled = () => {
     <>
       <Grid container sx={{ justifyContent: "center", alignItems: "center" }}>
         {diceBox.dices.map((dice, i) => (
-          <Grid key={i} size="grow">
+          <Grid key={i} size="grow" sx={{ minWidth: "min-content" }}>
             <Dice {...dice} size={diceSize} />
           </Grid>
         ))}
